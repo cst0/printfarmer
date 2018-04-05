@@ -1,0 +1,22 @@
+<!DOCTYPE HTML PUBlIC "-//W3C//DTD HTML 4.01//EN">
+<html lang="en">
+    <head>
+        <title> Taz 1 </title>
+        <link rel="stylesheet" type="text/css" href="octoprint.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+        <script>
+            $(document).ready(function() {
+                $("button").click(function() {
+                    $.get("demo_test.asp", function(data, status) {
+                        alert("Data: "+data+"\nStatus "+status);
+                    });
+                });
+            });
+        </script>
+    </head>
+    <body>
+        <h3><a href="../printfarmer.html"> Printfarmer </a> -> Taz 1</h3>
+        <button> Click </button>
+        <iframe src="http://10.0.0.6"></iframe>
+    </body>
+</html>

@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+<head>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script>
+        $("button").click(function() {
+            var json = '{"result":true,"count":1}';
+            obj = JSON.parse(json);
+            alert(obj.count);
+        });
+    </script>
+</head>
+<body>
+    <button> Send GET request </button>
+</body>
+</html>
+
+

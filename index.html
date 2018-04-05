@@ -1,0 +1,433 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN">
+<style>
+    body {
+        margin: 10px 20%
+    }
+</style>
+
+<html lang="en">
+    <head>
+        <meta content="text/html;charset=utf-8" http-equiv="Content-Type">
+        <meta content="utf-8" http-equiv="encoding">
+        <title> IEEE Printfarmer </title>
+        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script> <!-- Providing jQuery -->
+        <script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>          <!-- Providing the graph -->
+    </head>
+    <body>
+
+        <!-- Printer .3 -->
+        <script>
+            $(document).ready(function () {
+                console.log('Getting .3...\n');
+                $.getJSON('http://10.0.0.3/api/printer?history=true$limit=2&apikey=ieee-api',
+                function (data) {
+                    console.log(data);
+
+                    const dot3 = document.getElementById('dot3');
+                    dot3.innerHTML = JSON.stringify(data, null, 2);
+
+                    var dataPoints1 = [];
+                    var dataPoints2 = [];
+
+                    // Canvas code adapted from CanvasJS documentation
+                    var chart = new CanvasJS.Chart("dot3chart", {
+                    	title: {
+                    		text: "Active Temperatures"
+                    	},
+                    	axisX: {
+                    		title: "Time"
+                    	},
+                    	axisY:{
+                    		prefix: "",
+                    		includeZero: false
+                    	},
+                    	toolTip: {
+                    		shared: true
+                    	},
+                    	legend: {
+                    		cursor:"pointer",
+                    		verticalAlign: "top",
+                    		fontSize: 22,
+                    		fontColor: "dimGrey",
+                    	},
+                    	data: [{
+                    		type: "line",
+                    		yValueFormatString: "#### C",
+                    		showInLegend: true,
+                    		name: "Bed",
+                    		dataPoints: dataPoints1
+                    		},
+                    		{
+                    			type: "line",
+                    			yValueFormatString: "#### C",
+                    			showInLegend: true,
+                    			name: "Nozzle" ,
+                    			dataPoints: dataPoints2
+                    	}]
+                    });
+
+                    var updateInterval = 10;
+                    var dataLength = 100;
+                    // initial value
+                    var yValue1 = 0;
+                    var yValue2 = 0;
+
+                    var time = new Date;
+                    // starting at 0
+                    time.setHours(0);
+                    time.setMinutes(00);
+                    time.setSeconds(00);
+                    time.setMilliseconds(00);
+
+                    function updateChart(count) {
+                    	count = count || 1;
+                    	var deltaY1, deltaY2;
+                    	for (var i = 0; i < count; i++) {
+                            let temp = data.temperature;
+                            let bed = temp.bed;
+                            yVal = bed.actual;
+                            let tool0 = temp.tool0;
+
+                        	yValue1 = bed.actual;
+                        	yValue2 = tool0.actual;
+
+                        	// pushing the new values
+                        	dataPoints1.push({
+                        		y: yValue1
+                        	});
+                        	dataPoints2.push({
+                        		y: yValue2
+                        	});
+                    	}
+
+                    	// updating legend text with  updated with y Value
+                    	chart.options.data[0].legendText = " Bed Temp (c) " + yValue1;
+                    	chart.options.data[1].legendText = " Nozzle Temp (c) " + yValue2;
+                    	chart.render();
+                    }
+                    // generates first set of dataPoints
+                    updateChart(dataLength);
+                    setInterval(function(){updateChart()}, updateInterval);
+                });
+            });
+        </script>
+
+        <h2> .3 Lulzbot TAZ 5 </h2>
+        <a href="http://10.0.0.3">Connect to OctoPrint</a> (only supported on local network)
+        <pre>
+            <div id="dot3"></div>
+        </pre>
+        <div id="dot3chart" style="height: 370px; width:100%;"></div>
+
+
+        <!-- Printer .4 -->
+        <script>
+            $(document).ready(function () {
+                console.log('Getting .4...\n');
+                $.getJSON('http://10.0.0.4/api/printer?history=true$limit=2&apikey=ieee-api',
+                function (data) {
+                    console.log(data);
+
+                    const dot4 = document.getElementById('dot4');
+                    dot4.innerHTML = JSON.stringify(data, null, 2);
+
+                    var dataPoints1 = [];
+                    var dataPoints2 = [];
+
+                    var chart = new CanvasJS.Chart("dot4chart", {
+                    	title: {
+                    		text: "Active Temperatures"
+                    	},
+                    	axisX: {
+                    		title: "Time"
+                    	},
+                    	axisY:{
+                    		prefix: "",
+                    		includeZero: false
+                    	},
+                    	toolTip: {
+                    		shared: true
+                    	},
+                    	legend: {
+                    		cursor:"pointer",
+                    		verticalAlign: "top",
+                    		fontSize: 22,
+                    		fontColor: "dimGrey",
+                    	},
+                    	data: [{
+                    		type: "line",
+                    		yValueFormatString: "#### C",
+                    		showInLegend: true,
+                    		name: "Bed",
+                    		dataPoints: dataPoints1
+                    		},
+                    		{
+                    			type: "line",
+                    			yValueFormatString: "#### C",
+                    			showInLegend: true,
+                    			name: "Nozzle" ,
+                    			dataPoints: dataPoints2
+                    	}]
+                    });
+
+                    var updateInterval = 10;
+                    var dataLength = 100;
+                    // initial value
+                    var yValue1 = 0;
+                    var yValue2 = 0;
+
+                    var time = new Date;
+                    // starting at 0
+                    time.setHours(0);
+                    time.setMinutes(00);
+                    time.setSeconds(00);
+                    time.setMilliseconds(00);
+
+                    function updateChart(count) {
+                    	count = count || 1;
+                    	var deltaY1, deltaY2;
+                    	for (var i = 0; i < count; i++) {
+                            let temp = data.temperature;
+                            let bed = temp.bed;
+                            yVal = bed.actual;
+                            let tool0 = temp.tool0;
+
+                        	yValue1 = bed.actual;
+                        	yValue2 = tool0.actual;
+
+                        	// pushing the new values
+                        	dataPoints1.push({
+                        		y: yValue1
+                        	});
+                        	dataPoints2.push({
+                        		y: yValue2
+                        	});
+                    	}
+
+                    	// updating legend text with  updated with y Value
+                    	chart.options.data[0].legendText = " Bed Temp (c) " + yValue1;
+                    	chart.options.data[1].legendText = " Nozzle Temp (c) " + yValue2;
+                    	chart.render();
+                    }
+                    // generates first set of dataPoints
+                    updateChart(dataLength);
+                    setInterval(function(){updateChart()}, updateInterval);
+                });
+            });
+        </script>
+
+        <h2> .4 Vertex 4800 </h2>
+        <a href="http://10.0.0.4">Connect to OctoPrint</a> (only supported on local network)
+        <pre>
+            <div id="dot4"></div>
+        </pre>
+        <div id="dot4chart" style="height: 370px; width:100%;"></div>
+
+
+        <!-- Printer .5 -->
+        <script>
+            $(document).ready(function () {
+                console.log('Getting .5...\n');
+                $.getJSON('http://10.0.0.5/api/printer?history=true$limit=2&apikey=ieee-api',
+                function (data) {
+                    console.log(data);
+
+                    const dot5 = document.getElementById('dot5');
+                    dot5.innerHTML = JSON.stringify(data, null, 2);
+
+                    var dataPoints1 = [];
+                    var dataPoints2 = [];
+
+                    var chart = new CanvasJS.Chart("dot5chart", {
+                    	title: {
+                    		text: "Active Temperatures"
+                    	},
+                    	axisX: {
+                    		title: "Time"
+                    	},
+                    	axisY:{
+                    		prefix: "",
+                    		includeZero: false
+                    	},
+                    	toolTip: {
+                    		shared: true
+                    	},
+                    	legend: {
+                    		cursor:"pointer",
+                    		verticalAlign: "top",
+                    		fontSize: 22,
+                    		fontColor: "dimGrey",
+                    	},
+                    	data: [{
+                    		type: "line",
+                    		yValueFormatString: "#### C",
+                    		showInLegend: true,
+                    		name: "Bed",
+                    		dataPoints: dataPoints1
+                    		},
+                    		{
+                    			type: "line",
+                    			yValueFormatString: "#### C",
+                    			showInLegend: true,
+                    			name: "Nozzle" ,
+                    			dataPoints: dataPoints2
+                    	}]
+                    });
+
+                    var updateInterval = 10;
+                    var dataLength = 100;
+                    // initial value
+                    var yValue1 = 0;
+                    var yValue2 = 0;
+
+                    var time = new Date;
+                    // starting at 0
+                    time.setHours(0);
+                    time.setMinutes(00);
+                    time.setSeconds(00);
+                    time.setMilliseconds(00);
+
+                    function updateChart(count) {
+                    	count = count || 1;
+                    	var deltaY1, deltaY2;
+                    	for (var i = 0; i < count; i++) {
+                            let temp = data.temperature;
+                            let bed = temp.bed;
+                            yVal = bed.actual;
+                            let tool0 = temp.tool0;
+
+                        	yValue1 = bed.actual;
+                        	yValue2 = tool0.actual;
+
+                        	// pushing the new values
+                        	dataPoints1.push({
+                        		y: yValue1
+                        	});
+                        	dataPoints2.push({
+                        		y: yValue2
+                        	});
+                    	}
+
+                    	// updating legend text with  updated with y Value
+                    	chart.options.data[0].legendText = " Bed Temp (c) " + yValue1;
+                    	chart.options.data[1].legendText = " Nozzle Temp (c) " + yValue2;
+                    	chart.render();
+                    }
+                    // generates first set of dataPoints
+                    updateChart(dataLength);
+                    setInterval(function(){updateChart()}, updateInterval);
+                });
+            });
+        </script>
+
+        <h2> .5 Lulzbot TAZ 5 </h2>
+        <a href="http://10.0.0.5">Connect to OctoPrint</a> (only supported on local network)
+        <pre>
+            <div id="dot5"></div>
+        </pre>
+        <div id="dot5chart" style="height: 370px; width:100%;"></div>
+
+        <!-- Printer .6 -->
+        <script>
+            $(document).ready(function () {
+                console.log('Getting .6...\n');
+                $.getJSON('http://10.0.0.6/api/printer?history=true$limit=2&apikey=ieee-api',
+                function (data) {
+                    console.log(data);
+
+                    const dot6 = document.getElementById('dot6');
+                    dot6.innerHTML = JSON.stringify(data, null, 2);
+
+                    var dataPoints1 = [];
+                    var dataPoints2 = [];
+
+                    var chart = new CanvasJS.Chart("dot6chart", {
+                    	title: {
+                    		text: "Active Temperatures"
+                    	},
+                    	axisX: {
+                    		title: "Time"
+                    	},
+                    	axisY:{
+                    		prefix: "",
+                    		includeZero: false
+                    	},
+                    	toolTip: {
+                    		shared: true
+                    	},
+                    	legend: {
+                    		cursor:"pointer",
+                    		verticalAlign: "top",
+                    		fontSize: 22,
+                    		fontColor: "dimGrey",
+                    	},
+                    	data: [{
+                    		type: "line",
+                    		yValueFormatString: "#### C",
+                    		showInLegend: true,
+                    		name: "Bed",
+                    		dataPoints: dataPoints1
+                    		},
+                    		{
+                    			type: "line",
+                    			yValueFormatString: "#### C",
+                    			showInLegend: true,
+                    			name: "Nozzle" ,
+                    			dataPoints: dataPoints2
+                    	}]
+                    });
+
+                    var updateInterval = 10;
+                    var dataLength = 100;
+                    // initial value
+                    var yValue1 = 0;
+                    var yValue2 = 0;
+
+                    var time = new Date;
+                    // starting at 0
+                    time.setHours(0);
+                    time.setMinutes(00);
+                    time.setSeconds(00);
+                    time.setMilliseconds(00);
+
+                    function updateChart(count) {
+                    	count = count || 1;
+                    	var deltaY1, deltaY2;
+                    	for (var i = 0; i < count; i++) {
+                            let temp = data.temperature;
+                            let bed = temp.bed;
+                            yVal = bed.actual;
+                            let tool0 = temp.tool0;
+
+                        	yValue1 = bed.actual;
+                        	yValue2 = tool0.actual;
+
+                        	// pushing the new values
+                        	dataPoints1.push({
+                        		y: yValue1
+                        	});
+                        	dataPoints2.push({
+                        		y: yValue2
+                        	});
+                    	}
+
+                    	// updating legend text with  updated with y Value
+                    	chart.options.data[0].legendText = " Bed Temp (c) " + yValue1;
+                    	chart.options.data[1].legendText = " Nozzle Temp (c) " + yValue2;
+                    	chart.render();
+                    }
+                    // generates first set of dataPoints
+                    updateChart(dataLength);
+                    setInterval(function(){updateChart()}, updateInterval);
+                });
+            });
+        </script>
+
+        <h2> .6 Lulzbot TAZ 5 </h2>
+        <a href="http://10.0.0.6">Connect to OctoPrint</a> (only supported on local network)
+        <pre>
+            <div id="dot6"></div>
+        </pre>
+        <div id="dot6chart" style="height: 370px; width:100%;"></div>
+    </body>
+</html>
